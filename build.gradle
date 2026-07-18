@@ -11,11 +11,11 @@ buildscript {
 allprojects {
 
     ext {
-        appName = 'Shattered Pixel Dungeon'
-        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+        appName = 'Stalker Pixel Dungeon'
+        appPackageName = 'com.gnwd420.stalkerpixeldungeon'
 
         appVersionCode = 896
-        appVersionName = '3.3.8'
+        appVersionName = '0.1.0-dev'
 
         appJavaCompatibility = JavaVersion.VERSION_11
 

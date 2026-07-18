@@ -1,27 +1,65 @@
-# Shattered Pixel Dungeon
+# Stalker Pixel Dungeon
 
-[Shattered Pixel Dungeon](https://shatteredpixel.com/shatteredpd/) is an open-source traditional roguelike dungeon crawler with randomized levels and enemies, and hundreds of items to collect and use. It's based on the [source code of Pixel Dungeon](https://github.com/00-Evan/pixel-dungeon-gradle), by [Watabou](https://watabou.itch.io/).
+## Статус
 
-Shattered Pixel Dungeon currently compiles for Android, iOS, and Desktop platforms. You can find official releases of the game on:
+Проект находится на стадии ранней разработки. Публичного релиза пока нет.
 
-[![Get it on Google Play](https://shatteredpixel.com/assets/images/badges/gplay.png)](https://play.google.com/store/apps/details?id=com.shatteredpixel.shatteredpixeldungeon)
-[![Download on the App Store](https://shatteredpixel.com/assets/images/badges/appstore.png)](https://apps.apple.com/app/shattered-pixel-dungeon/id1563121109)
-[![Steam](https://shatteredpixel.com/assets/images/badges/steam.png)](https://store.steampowered.com/app/1769170/Shattered_Pixel_Dungeon/)<br>
-[![GOG.com](https://shatteredpixel.com/assets/images/badges/gog.png)](https://www.gog.com/game/shattered_pixel_dungeon)
-[![Itch.io](https://shatteredpixel.com/assets/images/badges/itch.png)](https://shattered-pixel.itch.io/shattered-pixel-dungeon)
-[![Github Releases](https://shatteredpixel.com/assets/images/badges/github.png)](https://github.com/00-Evan/shattered-pixel-dungeon/releases)
+Stalker Pixel Dungeon — независимая модификация, основанная на [Shattered Pixel Dungeon 3.3.8](https://github.com/00-Evan/shattered-pixel-dungeon). Проект не связан с авторами других игр, не одобрен ими и не заявляет о такой связи или одобрении.
 
-If you like this game, please consider [supporting me on Patreon](https://www.patreon.com/ShatteredPixel)!
+## Концепция
 
-There is an official blog for this project at [ShatteredPixel.com](https://www.shatteredpixel.com/blog/).
+Мир игры задуман как одна общая процедурно создаваемая карта Зоны с точками интереса. Через двери и другие переходы игрок попадает в отдельные ограниченные локации, после чего может вернуться на внешнюю карту с сохранением её состояния.
 
-The game also has a translation project hosted on [Transifex](https://explore.transifex.com/shattered-pixel/shattered-pixel-dungeon/).
+## Здания и подземелья
 
-Note that **this repository does not accept pull requests!** The code here is provided in hopes that others may find it useful for their own projects, not to allow community contribution. Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
+Планируемые отдельные локации включают дома, гаражи, заводы, базы, лаборатории и бункеры. Они будут отличаться планировкой, содержимым и рисками, оставаясь связанными с общей картой Зоны.
 
-If you'd like to work with the code, you can find the following guides in `/docs`:
-- [Compiling for Android.](docs/getting-started-android.md)
-    - **[If you plan to distribute on Google Play please read the end of this guide.](docs/getting-started-android.md#distributing-your-app)**
-- [Compiling for desktop platforms.](docs/getting-started-desktop.md)
-- [Compiling for iOS.](docs/getting-started-ios.md)
-- [Recommended changes for making your own version.](docs/recommended-changes.md)
+## Безопасные зоны
+
+Бар, магазин и база планируются как безопасные зоны для взаимодействия с нейтральными NPC, торговли, подготовки и сохранения прогресса.
+
+## Первая версия
+
+Scope первой игровой версии ограничен основными предметными системами:
+
+- огнестрельным оружием и боеприпасами;
+- бронёй и защитными характеристиками;
+- расходниками, включая аптечки, бинты, антирадиационные препараты и еду.
+
+Процедурная карта Зоны начнёт разрабатываться после минимального завершения этих систем.
+
+## Целевая платформа и требования
+
+Первая целевая платформа — Windows desktop.
+
+Для разработки требуются:
+
+- JDK 21;
+- Gradle Wrapper из репозитория.
+
+Компиляция desktop-модуля из Windows PowerShell:
+
+```powershell
+.\gradlew.bat :desktop:classes --no-daemon --console=plain
+```
+
+Запуск игры выполняется оператором из Windows PowerShell:
+
+```powershell
+.\gradlew.bat :desktop:debug --no-daemon --console=plain
+```
+
+## Ветки разработки
+
+- `develop` — рабочая ветка разработки мода.
+- `upstream-v3.3.8-base` — неизменяемая контрольная ветка исходной базы Shattered Pixel Dungeon 3.3.8.
+
+Подробная последовательность этапов описана в [дорожной карте мода](docs/MOD_ROADMAP.md).
+
+## Происхождение и лицензия
+
+Проект основан на Shattered Pixel Dungeon 3.3.8. Официальный upstream: [00-Evan/shattered-pixel-dungeon](https://github.com/00-Evan/shattered-pixel-dungeon).
+
+Код распространяется на условиях GNU General Public License version 3. Полный текст лицензии находится в [LICENSE.txt](LICENSE.txt), а сведения об авторстве и модификации — в [MOD_NOTICES.md](MOD_NOTICES.md).
+
+Stalker Pixel Dungeon является независимой модификацией. Она не использует принадлежность, поддержку или одобрение авторов других игр и не должна восприниматься как официальный продукт каких-либо сторонних правообладателей.
