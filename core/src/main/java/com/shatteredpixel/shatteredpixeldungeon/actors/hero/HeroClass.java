@@ -69,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurs
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ServicePistol;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
@@ -140,6 +141,19 @@ public enum HeroClass {
 			case CLERIC:
 				initCleric( hero );
 				break;
+		}
+
+		if (DeviceCompat.isDebug()) {
+			ServicePistol servicePistol = new ServicePistol();
+			servicePistol.identify();
+			if (servicePistol.collect()) {
+				for (int s = 0; s < QuickSlot.SIZE; s++) {
+					if (Dungeon.quickslot.getItem(s) == null) {
+						Dungeon.quickslot.setSlot(s, servicePistol);
+						break;
+					}
+				}
+			}
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {

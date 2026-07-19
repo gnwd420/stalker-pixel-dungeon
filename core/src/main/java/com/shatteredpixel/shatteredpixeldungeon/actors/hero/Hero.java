@@ -137,6 +137,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.Firearm;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -1428,6 +1429,19 @@ public class Hero extends Char {
 				Buff.affect(this, Talent.AggressiveBarrierCooldown.class, 50f);
 
 			}
+
+			KindOfWeapon weapon = belongings.attackingWeapon();
+			if (weapon instanceof Firearm && weapon.isEquipped(this)) {
+				if (((Firearm) weapon).fire(this, attackTarget.pos)) {
+					curAction = null;
+					attackTarget = null;
+				} else {
+					ready();
+					attackTarget = null;
+				}
+				return false;
+			}
+
 			//attack target cleared on onAttackComplete
 			sprite.attack( attackTarget.pos );
 
