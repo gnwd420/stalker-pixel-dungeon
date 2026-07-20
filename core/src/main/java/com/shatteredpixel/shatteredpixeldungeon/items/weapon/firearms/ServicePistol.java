@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ammunition.FirearmAmmo;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ammunition.PistolAmmo;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ServicePistol extends Firearm {
@@ -29,6 +31,7 @@ public class ServicePistol extends Firearm {
 	private static final int MIN_DAMAGE = 2;
 	private static final int MAX_DAMAGE = 6;
 	private static final int MAX_RANGE = 3;
+	private static final int MAGAZINE_CAPACITY = 8;
 	private static final int TIER = 1;
 
 	public ServicePistol() {
@@ -55,5 +58,15 @@ public class ServicePistol extends Firearm {
 	@Override
 	public int maxRange() {
 		return MAX_RANGE;
+	}
+
+	@Override
+	public int magazineCapacity() {
+		return MAGAZINE_CAPACITY;
+	}
+
+	@Override
+	public Class<? extends FirearmAmmo> ammoType() {
+		return PistolAmmo.class;
 	}
 }

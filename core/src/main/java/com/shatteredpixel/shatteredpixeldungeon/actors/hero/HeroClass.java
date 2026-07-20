@@ -70,6 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ServicePistol;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ammunition.PistolAmmo;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
@@ -154,6 +155,11 @@ public enum HeroClass {
 					}
 				}
 			}
+
+			PistolAmmo pistolAmmo = new PistolAmmo();
+			pistolAmmo.quantity(24);
+			pistolAmmo.identify();
+			pistolAmmo.collect();
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {

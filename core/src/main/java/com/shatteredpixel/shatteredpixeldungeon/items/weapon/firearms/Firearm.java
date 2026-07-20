@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.firearms.ammunition.FirearmAmmo;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -37,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
@@ -44,6 +46,11 @@ import java.util.ArrayList;
 public abstract class Firearm extends Weapon {
 
 	public static final String AC_FIRE = "FIRE";
+	public static final String AC_RELOAD = "RELOAD";
+
+	private static final String MAGAZINE = "magazine";
+
+	private int magazine = -1;
 
 	{
 		stackable = false;
@@ -56,6 +63,7 @@ public abstract class Firearm extends Weapon {
 		ArrayList<String> actions = super.actions(hero);
 		if (isEquipped(hero)) {
 			actions.add(AC_FIRE);
+			actions.add(AC_RELOAD);
 		}
 		return actions;
 	}
@@ -66,6 +74,8 @@ public abstract class Firearm extends Weapon {
 
 		if (action.equals(AC_FIRE) && isEquipped(hero)) {
 			GameScene.selectCell(shooter);
+		} else if (action.equals(AC_RELOAD) && isEquipped(hero)) {
+			reload(hero);
 		}
 	}
 
@@ -75,6 +85,24 @@ public abstract class Firearm extends Weapon {
 	}
 
 	public abstract int maxRange();
+	public abstract int magazineCapacity();
+	public abstract Class<? extends FirearmAmmo> ammoType();
+
+	private int magazine() {
+		if (magazine < 0) {
+			magazine = magazineCapacity();
+		}
+		return magazine;
+	}
+
+	public boolean isMagazineEmpty() {
+		return magazine() == 0;
+	}
+
+	@Override
+	public String status() {
+		return magazine() + "/" + magazineCapacity();
+	}
 
 	@Override
 	public boolean canReach(Char owner, int target) {
@@ -91,11 +119,15 @@ public abstract class Firearm extends Weapon {
 	}
 
 	protected boolean canFire(Hero user) {
+		if (isMagazineEmpty()) {
+			GLog.w(Messages.get(Firearm.class, "empty_magazine"));
+			return false;
+		}
 		return true;
 	}
 
 	protected void onShotFired(Hero user, Char target, boolean hit) {
-		// Extension point for M2.2.
+		// Extension point for firearm-specific shot effects.
 	}
 
 	public boolean fire(final Hero user, final int target) {
@@ -108,12 +140,12 @@ public abstract class Firearm extends Weapon {
 			return false;
 		}
 
-		if (Dungeon.level.distance(user.pos, target) > maxRange()) {
-			GLog.w(Messages.get(Firearm.class, "out_of_range"));
+		if (!canFire(user)) {
 			return false;
 		}
 
-		if (!canFire(user)) {
+		if (Dungeon.level.distance(user.pos, target) > maxRange()) {
+			GLog.w(Messages.get(Firearm.class, "out_of_range"));
 			return false;
 		}
 
@@ -142,6 +174,7 @@ public abstract class Firearm extends Weapon {
 				}
 
 				Invisibility.dispel();
+				magazine = Math.max(0, magazine() - 1);
 				onShotFired(user, collisionTarget, hit);
 				updateQuickslot();
 				user.spendAndNext(Actor.TICK);
@@ -158,6 +191,48 @@ public abstract class Firearm extends Weapon {
 		}
 
 		return true;
+	}
+
+	private void reload(Hero user) {
+		int freeSpace = magazineCapacity() - magazine();
+		if (freeSpace <= 0) {
+			GLog.w(Messages.get(Firearm.class, "magazine_full"));
+			return;
+		}
+
+		FirearmAmmo ammo = user.belongings.getItem(ammoType());
+		if (ammo == null || ammo.quantity() <= 0) {
+			GLog.w(Messages.get(Firearm.class, "no_ammo"));
+			return;
+		}
+
+		int loaded = Math.min(freeSpace, ammo.quantity());
+		if (loaded == ammo.quantity()) {
+			ammo.detachAll(user.belongings.backpack);
+		} else {
+			ammo.quantity(ammo.quantity() - loaded);
+		}
+		magazine += loaded;
+
+		GLog.p(Messages.get(Firearm.class, "reloaded"));
+		updateQuickslot();
+		user.spendAndNext(Actor.TICK);
+	}
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		bundle.put(MAGAZINE, magazine());
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		if (bundle.contains(MAGAZINE)) {
+			magazine = Math.max(0, Math.min(magazineCapacity(), bundle.getInt(MAGAZINE)));
+		} else {
+			magazine = magazineCapacity();
+		}
 	}
 
 	private static final CellSelector.Listener shooter = new CellSelector.Listener() {

@@ -1417,6 +1417,17 @@ public class Hero extends Char {
 			return false;
 		}
 
+		KindOfWeapon activeWeapon = belongings.attackingWeapon();
+		if (attackTarget.isAlive()
+				&& activeWeapon instanceof Firearm
+				&& activeWeapon.isEquipped(this)
+				&& ((Firearm) activeWeapon).isMagazineEmpty()) {
+			((Firearm) activeWeapon).fire(this, attackTarget.pos);
+			ready();
+			attackTarget = null;
+			return false;
+		}
+
 		if (attackTarget.isAlive() && canAttack(attackTarget) && attackTarget.invisible == 0) {
 
 			if (heroClass != HeroClass.DUELIST
