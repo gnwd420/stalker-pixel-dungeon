@@ -50,9 +50,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.FieldProtectiveSuit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.consumables.AntiRadiationDrug;
+import com.shatteredpixel.shatteredpixeldungeon.items.consumables.Bandage;
+import com.shatteredpixel.shatteredpixeldungeon.items.consumables.FieldMedkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
@@ -160,6 +164,20 @@ public enum HeroClass {
 			pistolAmmo.quantity(24);
 			pistolAmmo.identify();
 			pistolAmmo.collect();
+
+			new FieldProtectiveSuit().identify().collect();
+
+			FieldMedkit fieldMedkit = new FieldMedkit();
+			fieldMedkit.quantity( 3 );
+			fieldMedkit.identify().collect();
+
+			Bandage bandage = new Bandage();
+			bandage.quantity( 3 );
+			bandage.identify().collect();
+
+			AntiRadiationDrug antiRadiationDrug = new AntiRadiationDrug();
+			antiRadiationDrug.quantity( 3 );
+			antiRadiationDrug.identify().collect();
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {
